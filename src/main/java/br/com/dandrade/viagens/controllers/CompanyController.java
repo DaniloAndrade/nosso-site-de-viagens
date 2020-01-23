@@ -1,8 +1,8 @@
 package br.com.dandrade.viagens.controllers;
 
-import br.com.dandrade.viagens.controllers.dto.input.CompanyRequest;
+import br.com.dandrade.viagens.controllers.dto.input.NewCompanyRequest;
 import br.com.dandrade.viagens.controllers.dto.output.CompanyResponse;
-import br.com.dandrade.viagens.controllers.validators.CompanyValidator;
+import br.com.dandrade.viagens.controllers.validators.NewCompanyValidator;
 import br.com.dandrade.viagens.models.Company;
 import br.com.dandrade.viagens.repository.CompanyRepository;
 import br.com.dandrade.viagens.repository.CountryRepository;
@@ -30,15 +30,16 @@ public class CompanyController {
     }
 
     @PostMapping
-    public CompanyResponse add(@Valid @RequestBody CompanyRequest request) {
-        Company company = request.newCompany(countryRepository::findByName);
+    public CompanyResponse add(@Valid @RequestBody NewCompanyRequest request) {
+        LOGGER.info("New company: {}", request);
+        Company company = request.newCompany(countryRepository::findById);
         companyRepository.save(company);
-        return CompanyResponse.create(company);
+        return new CompanyResponse(company);
     }
 
     @InitBinder
     public void initBinde(WebDataBinder dataBinder) {
-        dataBinder.addValidators(new CompanyValidator(companyRepository, countryRepository));
+        dataBinder.addValidators(new NewCompanyValidator(companyRepository));
     }
 
 

@@ -21,17 +21,14 @@ public class Company {
 
     private Instant createAt;
 
+    @Deprecated
     public Company() {
     }
 
     public Company(String name, Country country) {
         this.name = name;
         this.country = country;
-    }
-
-    @PrePersist
-    protected void prePersist() {
-        createAt = Instant.now();
+        this.createAt = Instant.now();
     }
 
     public Long getId() {

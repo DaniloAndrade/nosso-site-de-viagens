@@ -7,10 +7,10 @@ public class CompanyResponse {
     private final String name;
     private final String country;
 
-    public CompanyResponse(Long id, String name, String country) {
-        this.id = id;
-        this.name = name;
-        this.country = country;
+    public CompanyResponse(Company company) {
+        this.id = company.getId();
+        this.name = company.getName();
+        this.country = company.getCountryName();
     }
 
 
@@ -26,8 +26,4 @@ public class CompanyResponse {
         return country;
     }
 
-    public static CompanyResponse create(Company company) {
-        return new CompanyResponse(company.getId(), company.getName(),
-                company.getCountryName() );
-    }
 }
