@@ -1,7 +1,7 @@
 package br.com.dandrade.viagens.controllers;
 
 import br.com.dandrade.viagens.controllers.dto.input.NewAirportRequest;
-import br.com.dandrade.viagens.controllers.dto.output.AirportReponse;
+import br.com.dandrade.viagens.controllers.dto.output.AirportResponse;
 import br.com.dandrade.viagens.controllers.validators.NewAirportValidator;
 import br.com.dandrade.viagens.models.Airport;
 import br.com.dandrade.viagens.repository.AirportRespository;
@@ -28,11 +28,11 @@ public class AirportController {
     }
 
     @PostMapping
-    public AirportReponse add(@Valid @RequestBody NewAirportRequest request) {
+    public AirportResponse add(@Valid @RequestBody NewAirportRequest request) {
         LOGGER.info("New airport: {}", request);
         Airport airport = request.newAirport(countrys::findById);
         airports.save(airport);
-        return new AirportReponse(airport);
+        return new AirportResponse(airport);
     }
 
     @InitBinder

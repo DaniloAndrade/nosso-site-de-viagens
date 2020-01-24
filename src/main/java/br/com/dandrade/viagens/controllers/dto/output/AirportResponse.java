@@ -2,12 +2,12 @@ package br.com.dandrade.viagens.controllers.dto.output;
 
 import br.com.dandrade.viagens.models.Airport;
 
-public class AirportReponse {
+public class AirportResponse {
     private final Long id;
     private final String name;
     private final String country;
 
-    public AirportReponse(Airport airport) {
+    public AirportResponse(Airport airport) {
         this.id = airport.getId();
         this.name = airport.getName();
         this.country = airport.getCountryName();
