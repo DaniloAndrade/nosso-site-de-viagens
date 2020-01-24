@@ -1,5 +1,6 @@
 package br.com.dandrade.viagens.controllers.dto.input;
 
+import br.com.dandrade.viagens.functions.FinderById;
 import br.com.dandrade.viagens.models.Company;
 import br.com.dandrade.viagens.models.Country;
 
@@ -31,8 +32,8 @@ public class NewCompanyRequest {
         return this.name;
     }
 
-    public Company newCompany(Function<Long, Optional<Country>> findCountry) {
-        return findCountry.apply(countryId).map(c -> new Company(name, c)).orElseThrow();
+    public Company newCompany(FinderById<Long, Optional<Country>> findCountry) {
+        return findCountry.findById(countryId).map(c -> new Company(name, c)).orElseThrow();
     }
 
     @Override
