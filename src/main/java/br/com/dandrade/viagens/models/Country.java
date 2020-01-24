@@ -16,6 +16,7 @@ public class Country {
     @NotBlank
     private String name;
 
+    @Deprecated
     public Country() {
     }
 
