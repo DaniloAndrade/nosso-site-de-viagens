@@ -73,23 +73,23 @@ public class AirRoute {
         private Builder() {
         }
 
-        public Builder withName(String val) {
-            name = val;
+        public Builder withName(String name) {
+            this.name = name;
             return this;
         }
 
-        public Builder withOrigin(Airport val) {
-            origin = val;
+        public Builder withOrigin(Airport origin) {
+            this.origin = origin;
             return this;
         }
 
-        public Builder withDestiny(Airport val) {
-            destiny = val;
+        public Builder withDestiny(Airport destiny) {
+            this.destiny = destiny;
             return this;
         }
 
-        public Builder withDuration(Long val) {
-            duration = val;
+        public Builder withDuration(Long duration) {
+            this.duration = duration;
             return this;
         }
 
