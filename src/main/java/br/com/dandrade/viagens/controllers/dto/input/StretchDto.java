@@ -14,7 +14,7 @@ public class StretchDto {
     private Integer index;
 
     @NotNull
-    private Long airRoute;
+    private Long airRouteId;
 
     private FlightType type;
 
@@ -26,8 +26,8 @@ public class StretchDto {
         this.index = index;
     }
 
-    public void setAirRoute(Long airRoute) {
-        this.airRoute = airRoute;
+    public void setAirRouteId(Long airRouteId) {
+        this.airRouteId = airRouteId;
     }
 
     public void setType(FlightType type) {
@@ -42,14 +42,14 @@ public class StretchDto {
     public String toString() {
         return "StretchDto{" +
                 "order=" + index +
-                ", airRoute=" + airRoute +
+                ", airRoute=" + airRouteId +
                 ", type='" + type + '\'' +
                 ", stopTime=" + stopTime +
                 '}';
     }
 
     Stretch newStretch(FinderById<Long, Optional<AirRoute>> finderById) {
-        AirRoute airRoute = finderById.findById(this.airRoute).orElseThrow();
+        AirRoute airRoute = finderById.findById(this.airRouteId).orElseThrow();
         return new Stretch(index, airRoute, type, stopTime);
     }
 

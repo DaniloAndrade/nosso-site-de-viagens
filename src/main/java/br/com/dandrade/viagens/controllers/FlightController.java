@@ -6,6 +6,7 @@ import br.com.dandrade.viagens.controllers.validators.NewCompanyValidator;
 import br.com.dandrade.viagens.controllers.validators.NewFlightValidator;
 import br.com.dandrade.viagens.models.Flight;
 import br.com.dandrade.viagens.repository.AirRouteRepository;
+import br.com.dandrade.viagens.repository.CompanyRepository;
 import br.com.dandrade.viagens.repository.FlightRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,18 +23,22 @@ public class FlightController {
 
     private FlightRepository flights;
     private AirRouteRepository airRoutes;
+    private CompanyRepository companys;
 
     public FlightController(FlightRepository flights,
-                            AirRouteRepository airRoutes) {
+                            AirRouteRepository airRoutes,
+                            CompanyRepository companys) {
         this.flights = flights;
         this.airRoutes = airRoutes;
+        this.companys = companys;
     }
 
 
     @PostMapping
     public FlightResponse add(@Valid @RequestBody NewFlightRequest request) {
         LOGGER.info("New flight: {}", request);
-        Flight flight = request.newFlight(airRoutes::findById);
+        Flight flight = request.newFlight(airRoutes::findById,
+                companys::findById);
         flights.save(flight);
         return new FlightResponse(flight);
     }

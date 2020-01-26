@@ -14,6 +14,9 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    private Company company;
+
     @NotNull
     @Positive
     private Integer numberOfSeats;
@@ -27,8 +30,9 @@ public class Flight {
     public Flight() {
     }
 
-    public Flight(Integer numberOfSeats, List<Stretch> stretchs) {
+    public Flight(Integer numberOfSeats,Company company, List<Stretch> stretchs) {
         this.numberOfSeats = numberOfSeats;
+        this.company = company;
         this.stretchs = stretchs;
     }
 
@@ -44,5 +48,9 @@ public class Flight {
 
     public List<Stretch> getStretchs() {
         return stretchs;
+    }
+
+    public String getCompanyName() {
+        return company.getName();
     }
 }

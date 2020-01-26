@@ -2,6 +2,7 @@ package br.com.dandrade.viagens.controllers.dto.input;
 
 import br.com.dandrade.viagens.functions.FinderById;
 import br.com.dandrade.viagens.models.AirRoute;
+import br.com.dandrade.viagens.models.Company;
 import br.com.dandrade.viagens.models.Flight;
 import br.com.dandrade.viagens.models.Stretch;
 
@@ -18,6 +19,9 @@ public class NewFlightRequest {
     @Positive
     private Integer numberOfSeats;
 
+    @NotNull
+    private Long companyId;
+
     @Size(min = 1)
     private List<StretchDto> stretchs;
 
@@ -27,6 +31,10 @@ public class NewFlightRequest {
 
     public void setStretchs(List<StretchDto> stretchs) {
         this.stretchs = stretchs;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public List<StretchDto> getStretchs() {
@@ -41,10 +49,12 @@ public class NewFlightRequest {
                 '}';
     }
 
-    public Flight newFlight(FinderById<Long, Optional<AirRoute>> finderById) {
+    public Flight newFlight(FinderById<Long, Optional<AirRoute>> finderAirRoute,
+                            FinderById<Long, Optional<Company>> finderCompany) {
         List<Stretch> stretchList =  stretchs.stream()
-                .map(s -> s.newStretch(finderById))
+                .map(s -> s.newStretch(finderAirRoute))
                 .collect(Collectors.toList());
-        return new Flight(numberOfSeats, stretchList);
+        Company company = finderCompany.findById(companyId).orElseThrow();
+        return new Flight(numberOfSeats, company, stretchList);
     }
 }

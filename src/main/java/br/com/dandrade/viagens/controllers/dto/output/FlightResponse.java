@@ -10,6 +10,7 @@ public class FlightResponse {
     private final Long id;
     private final Integer numberOfSeats;
     private final String stretchs;
+    private final String company;
 
     public FlightResponse(Flight flight) {
         id = flight.getId();
@@ -17,6 +18,7 @@ public class FlightResponse {
         stretchs = flight.getStretchs().stream()
                 .map(Stretch::getDescription)
                 .collect(Collectors.joining(","));
+        company = flight.getCompanyName();
     }
 
 
@@ -30,5 +32,9 @@ public class FlightResponse {
 
     public String getStretchs() {
         return stretchs;
+    }
+
+    public String getCompany() {
+        return company;
     }
 }
