@@ -4,8 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Flight {
@@ -23,14 +22,15 @@ public class Flight {
 
     @Size(min = 1)
     @ElementCollection
-    private List<Stretch> stretchs = new LinkedList<>();
+    @OrderBy("index asc")
+    private SortedSet<Stretch> stretchs = new TreeSet<>();
 
 
     @Deprecated
     public Flight() {
     }
 
-    public Flight(Integer numberOfSeats,Company company, List<Stretch> stretchs) {
+    public Flight(Integer numberOfSeats,Company company, SortedSet<Stretch> stretchs) {
         this.numberOfSeats = numberOfSeats;
         this.company = company;
         this.stretchs = stretchs;
@@ -46,7 +46,7 @@ public class Flight {
         return numberOfSeats;
     }
 
-    public List<Stretch> getStretchs() {
+    public SortedSet<Stretch> getStretchs() {
         return stretchs;
     }
 

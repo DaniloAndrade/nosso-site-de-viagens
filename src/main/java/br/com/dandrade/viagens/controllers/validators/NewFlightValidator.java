@@ -5,7 +5,7 @@ import br.com.dandrade.viagens.controllers.dto.input.StretchDto;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.util.List;
+import java.util.Set;
 
 public class NewFlightValidator implements Validator {
     @Override
@@ -16,13 +16,7 @@ public class NewFlightValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         NewFlightRequest request = (NewFlightRequest) o;
-        List<StretchDto> stretchs = request.getStretchs();
-
-        if (stretchs.isEmpty()) {
-            errors.reject("flight.stretchs.is.required",
-                    new Object[]{},
-                    "Ao menos uma rota é necessaria!");
-        }
+        Set<StretchDto> stretchs = request.getStretchs();
 
         long count = stretchs.stream().filter(StretchDto::isDirect).count();
         if (count > 1) {

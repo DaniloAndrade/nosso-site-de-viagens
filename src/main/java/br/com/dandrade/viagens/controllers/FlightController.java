@@ -14,6 +14,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/flight")
@@ -41,6 +42,11 @@ public class FlightController {
                 companys::findById);
         flights.save(flight);
         return new FlightResponse(flight);
+    }
+
+    @GetMapping
+    public List<Flight> list() {
+        return flights.findAll();
     }
 
     @InitBinder

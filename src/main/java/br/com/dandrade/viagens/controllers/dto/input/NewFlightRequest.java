@@ -9,8 +9,10 @@ import br.com.dandrade.viagens.models.Stretch;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class NewFlightRequest {
@@ -23,13 +25,13 @@ public class NewFlightRequest {
     private Long companyId;
 
     @Size(min = 1)
-    private List<StretchDto> stretchs;
+    private Set<StretchDto> stretchs;
 
     public void setNumberOfSeats(Integer numberOfSeats) {
         this.numberOfSeats = numberOfSeats;
     }
 
-    public void setStretchs(List<StretchDto> stretchs) {
+    public void setStretchs(Set<StretchDto> stretchs) {
         this.stretchs = stretchs;
     }
 
@@ -37,7 +39,7 @@ public class NewFlightRequest {
         this.companyId = companyId;
     }
 
-    public List<StretchDto> getStretchs() {
+    public Set<StretchDto> getStretchs() {
         return stretchs;
     }
 
@@ -51,9 +53,9 @@ public class NewFlightRequest {
 
     public Flight newFlight(FinderById<Long, Optional<AirRoute>> finderAirRoute,
                             FinderById<Long, Optional<Company>> finderCompany) {
-        List<Stretch> stretchList =  stretchs.stream()
+        SortedSet<Stretch> stretchList =  stretchs.stream()
                 .map(s -> s.newStretch(finderAirRoute))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(TreeSet::new));
         Company company = finderCompany.findById(companyId).orElseThrow();
         return new Flight(numberOfSeats, company, stretchList);
     }

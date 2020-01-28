@@ -1,6 +1,7 @@
 package br.com.dandrade.viagens.models;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Optional;
 
 @Entity
@@ -59,6 +60,20 @@ public class AirRoute {
         return this.destiny.getName();
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AirRoute airRoute = (AirRoute) o;
+        return origin.equals(airRoute.origin) &&
+                destiny.equals(airRoute.destiny);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(origin, destiny);
+    }
 
     public static Builder newBuilder() {
         return new Builder();

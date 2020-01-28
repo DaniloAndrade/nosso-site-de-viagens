@@ -2,6 +2,7 @@ package br.com.dandrade.viagens.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Entity
 public class Airport {
@@ -37,5 +38,19 @@ public class Airport {
 
     public String getCountryName() {
         return this.country.getName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Airport airport = (Airport) o;
+        return name.equals(airport.name) &&
+                country.equals(airport.country);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, country);
     }
 }

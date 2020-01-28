@@ -7,6 +7,7 @@ import br.com.dandrade.viagens.models.Stretch;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.Objects;
 import java.util.Optional;
 
 public class StretchDto {
@@ -55,5 +56,18 @@ public class StretchDto {
 
     public boolean isDirect() {
         return type == FlightType.DIRECT;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StretchDto that = (StretchDto) o;
+        return airRouteId.equals(that.airRouteId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(airRouteId);
     }
 }
