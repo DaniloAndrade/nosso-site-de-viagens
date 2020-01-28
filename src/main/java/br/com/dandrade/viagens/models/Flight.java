@@ -30,10 +30,10 @@ public class Flight {
     public Flight() {
     }
 
-    public Flight(Integer numberOfSeats,Company company, SortedSet<Stretch> stretchs) {
+    public Flight(Integer numberOfSeats,Company company, Collection<Stretch> stretchs) {
         this.numberOfSeats = numberOfSeats;
         this.company = company;
-        this.stretchs = stretchs;
+        this.stretchs.addAll(stretchs);
     }
 
 
