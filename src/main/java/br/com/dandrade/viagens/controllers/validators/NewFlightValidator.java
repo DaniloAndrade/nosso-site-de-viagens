@@ -7,7 +7,6 @@ import org.springframework.validation.Validator;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class NewFlightValidator implements Validator {
     @Override
@@ -21,7 +20,7 @@ public class NewFlightValidator implements Validator {
         List<StretchDto> stretchs = request.getStretchs();
 
         long count = stretchs.stream().filter(StretchDto::isDirect).count();
-        if (count > 1) {
+        if (count != 1) {
             errors.reject("flight.stretchs.only-one-can-be-direct",
                     new Object[]{},
                     "Somente um trecho pode ser direto");
@@ -34,5 +33,7 @@ public class NewFlightValidator implements Validator {
                     new Object[]{},
                     "O voo não deve ter trechos repetidos!");
         }
+
+
     }
 }
