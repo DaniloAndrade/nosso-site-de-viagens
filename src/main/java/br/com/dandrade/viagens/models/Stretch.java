@@ -34,6 +34,23 @@ public class Stretch implements Comparable<Stretch>{
         return airRoute.getName()  + "(" + type.name().toLowerCase() + ")";
     }
 
+
+    public AirRoute getAirRoute() {
+        return airRoute;
+    }
+
+    public FlightType getType() {
+        return type;
+    }
+
+    public boolean isConnection() {
+        return this.type == FlightType.CONNECTION;
+    }
+
+    public boolean isScale() {
+        return this.type == FlightType.SCALE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,4 +68,6 @@ public class Stretch implements Comparable<Stretch>{
     public int compareTo(Stretch o) {
         return this.index.compareTo(o.index);
     }
+
+
 }

@@ -1,18 +1,24 @@
 package br.com.dandrade.viagens.controllers;
 
 import br.com.dandrade.viagens.controllers.dto.input.NewTicketRequest;
+import br.com.dandrade.viagens.controllers.dto.input.TicketFilter;
 import br.com.dandrade.viagens.controllers.dto.output.TicketResponse;
+import br.com.dandrade.viagens.controllers.dto.output.TicketSummary;
 import br.com.dandrade.viagens.models.Ticket;
 import br.com.dandrade.viagens.repository.FlightRepository;
 import br.com.dandrade.viagens.repository.TicketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/ticket")
@@ -35,5 +41,10 @@ public class TicketController {
         Ticket ticket = request.newTicket(flights::findById);
         tickets.save(ticket);
         return new TicketResponse(ticket);
+    }
+
+    @GetMapping
+    public List<TicketSummary> find(@RequestParam TicketFilter filter) {
+        return TicketSummary.create(tickets.findAll(filter.createFilter()), filter.getNumberOfPassengers());
     }
 }

@@ -6,6 +6,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
@@ -55,7 +57,26 @@ public class Ticket {
                 .collect(Collectors.joining(","));
     }
 
+    public String getOrigin() {
+        return this.flight.getStretchs()
+                .first()
+                .getAirRoute()
+                .getOriginAirportName();
+    }
+
+    public String getDestiny() {
+        return this.flight.getStretchs()
+                .last()
+                .getAirRoute()
+                .getDestinyAirportName();
+    }
+
+
     public String getCompanyName() {
         return flight.getCompanyName();
+    }
+
+    public Collection<Stretch> getStretchs() {
+        return flight.getStretchs();
     }
 }
