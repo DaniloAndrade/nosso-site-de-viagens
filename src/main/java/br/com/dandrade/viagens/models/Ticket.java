@@ -1,13 +1,16 @@
 package br.com.dandrade.viagens.models;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
@@ -71,6 +74,9 @@ public class Ticket {
                 .getDestinyAirportName();
     }
 
+    public Flight getFlight() {
+        return flight;
+    }
 
     public String getCompanyName() {
         return flight.getCompanyName();

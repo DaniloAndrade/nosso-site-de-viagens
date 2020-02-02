@@ -43,6 +43,10 @@ public class Stretch implements Comparable<Stretch>{
         return type;
     }
 
+    public Long getStopTime() {
+        return stopTime;
+    }
+
     public boolean isConnection() {
         return this.type == FlightType.CONNECTION;
     }
