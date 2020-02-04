@@ -43,6 +43,11 @@ public class TicketController {
 
     @GetMapping
     public List<TicketSummary> find(@Valid TicketFilter filter) {
-        return TicketSummary.create(tickets.findAll(filter.createFilter()), filter.getNumberOfPassengers());
+        if (filter.isRoundTrip()) {
+            List<Ticket> outwardTickets = tickets.findAll( filter.outwardFilter() );
+            List<Ticket> backTickets = tickets.findAll( filter.backFilter() );
+            return TicketSummary.create( outwardTickets, backTickets, filter.getNumberOfPassengers() );
+        }
+        return TicketSummary.create( tickets.findAll( filter.outwardFilter() ), filter.getNumberOfPassengers());
     }
 }

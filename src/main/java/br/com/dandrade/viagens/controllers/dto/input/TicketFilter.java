@@ -64,17 +64,9 @@ public class TicketFilter {
         this.maxValue = maxValue;
     }
 
-    public Specification<Ticket> createFilter() {
-        Specification<Ticket> oneWayTicket = oneWayTicket();
 
-        if (!roundTrip) {
-            return oneWayTicket;
-        }
 
-        return oneWayTicket.or( returnTicket() );
-    }
-
-    private Specification<Ticket> returnTicket() {
+    public Specification<Ticket> backFilter() {
         return ( root, query, criteriaBuilder ) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -107,7 +99,7 @@ public class TicketFilter {
     }
 
 
-    private Specification<Ticket> oneWayTicket() {
+    public Specification<Ticket> outwardFilter() {
         return ( root, criteriaQuery, criteriaBuilder ) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -131,5 +123,9 @@ public class TicketFilter {
 
             return criteriaBuilder.and( predicates.toArray( new Predicate[ 0 ] ) );
         };
+    }
+
+    public boolean isRoundTrip() {
+        return roundTrip;
     }
 }
