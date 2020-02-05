@@ -3,6 +3,8 @@ package br.com.dandrade.viagens.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Embeddable
@@ -74,4 +76,11 @@ public class Stretch implements Comparable<Stretch>{
     }
 
 
+    public LocalTime landingTime( LocalTime localTime, ChronoUnit chronoUnit ) {
+        return localTime.plus( getAirRoute().getDuration(), chronoUnit );
+    }
+
+    public LocalTime takeOffTime( LocalTime localTime, ChronoUnit chronoUnit ) {
+        return localTime.plus( stopTime, chronoUnit );
+    }
 }

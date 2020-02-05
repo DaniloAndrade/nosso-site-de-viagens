@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TicketSummary {
@@ -18,16 +19,14 @@ public class TicketSummary {
 
     public TicketSummary(Ticket ticket, Integer numberOfPassengers) {
         this.outward = new FlightDto( ticket );
-        this.totalValue = ticket.getValue().multiply(new BigDecimal( numberOfPassengers ) );
+        this.totalValue = ticket.calculateTotal( Optional.empty(), numberOfPassengers );
 
     }
 
     public TicketSummary( Ticket outward, Ticket back, Integer numberOfPassengers ) {
         this.outward = new FlightDto( outward);
         this.back = new FlightDto( back);
-        this.totalValue = outward.getValue()
-                .add( back.getValue() )
-                .multiply( new BigDecimal( numberOfPassengers ) );
+        this.totalValue = outward.calculateTotal( Optional.of( back) , numberOfPassengers);
     }
 
     public FlightDto getOutward() {

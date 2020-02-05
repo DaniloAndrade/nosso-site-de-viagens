@@ -1,12 +1,12 @@
 package br.com.dandrade.viagens.controllers.dto.output;
 
+import br.com.dandrade.viagens.models.AirRoute;
 import br.com.dandrade.viagens.models.Stretch;
+import br.com.dandrade.viagens.models.StretchMinimalInfo;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class StretchDto {
@@ -14,6 +14,10 @@ public class StretchDto {
     private String in;
     private LocalTime takeOff;
     private LocalTime landing;
+
+    public StretchDto( AirRoute airRoute,  LocalTime takeOff, LocalTime landing ) {
+        this(airRoute.getOriginAirportName(), airRoute.getDestinyAirportName(), takeOff, landing);
+    }
 
     public StretchDto( String out, String in, LocalTime takeOff, LocalTime landing ) {
         this.out = out;
@@ -39,18 +43,15 @@ public class StretchDto {
         return landing;
     }
 
-    public static List<StretchDto> create( Collection<Stretch> stretchs, LocalDateTime departure ) {
+    public static List<StretchDto> create( StretchMinimalInfo minimalInfo ) {
 
         List<StretchDto> stretchDtos = new ArrayList<>(  );
-        LocalTime stretchTime = departure.toLocalTime();
+        LocalTime takeOff = minimalInfo.getDeparture().toLocalTime();
 
-        for (Stretch stretch: stretchs) {
-            LocalTime takeOff = stretchTime;
-            LocalTime landing = takeOff.plus( stretch.getAirRoute().getDuration(), ChronoUnit.MINUTES );
-
-            StretchDto stretchDto = new StretchDto( stretch.getAirRoute().getOriginAirportName(),
-                                                    stretch.getAirRoute().getDestinyAirportName(), takeOff, landing );
-            stretchTime = landing.plus( stretch.getStopTime(), ChronoUnit.MINUTES );
+        for (Stretch stretch: minimalInfo.getStretchs()) {
+            LocalTime landing = stretch.landingTime( takeOff, ChronoUnit.MINUTES );
+            StretchDto stretchDto = new StretchDto( stretch.getAirRoute(), takeOff, landing );
+            takeOff = stretch.takeOffTime(landing, ChronoUnit.MINUTES);
             stretchDtos.add( stretchDto );
         }
 

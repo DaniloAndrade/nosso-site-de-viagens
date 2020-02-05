@@ -1,6 +1,5 @@
 package br.com.dandrade.viagens.controllers.dto.output;
 
-import br.com.dandrade.viagens.models.Stretch;
 import br.com.dandrade.viagens.models.Ticket;
 
 import java.util.List;
@@ -18,8 +17,8 @@ public class FlightDto {
         this.company = ticket.getCompanyName();
         this.destiny = ticket.getDestiny();
         this.origin = ticket.getOrigin();
-        this.stretchs = StretchDto.create(ticket.getStretchs(), ticket.getDeparture());
-        this.totalTimeOfScale = calculateDowntime( ticket );
+        this.stretchs = StretchDto.create(ticket);
+        this.totalTimeOfScale = ticket.calculateDowntime();
         this.connectionsOrScale = retrieveScalesOrConnections( ticket );
     }
 
@@ -58,9 +57,5 @@ public class FlightDto {
                 ).collect( Collectors.toList());
     }
 
-    private Long calculateDowntime( Ticket ticket ) {
-        return ticket.getStretchs()
-                .stream().filter( stretch -> stretch.isConnection() || stretch.isScale() )
-                .map( Stretch::getStopTime ).reduce( 0L, Long::sum );
-    }
+
 }

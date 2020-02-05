@@ -11,10 +11,11 @@ import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
-public class Ticket {
+public class Ticket implements StretchMinimalInfo{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,4 +86,18 @@ public class Ticket {
     public Collection<Stretch> getStretchs() {
         return flight.getStretchs();
     }
+
+    public Long calculateDowntime() {
+        return getStretchs()
+                .stream().filter( stretch -> stretch.isConnection() || stretch.isScale() )
+                .map( Stretch::getStopTime ).reduce( 0L, Long::sum );
+    }
+
+    public BigDecimal calculateTotal( Optional<Ticket> maybeTicketBack, Integer numberOfPassengers ) {
+        return maybeTicketBack.map( back -> this.value.add( back.value ) )
+                .orElse( this.value )
+                .multiply( new BigDecimal( numberOfPassengers ) );
+    }
+
+
 }
