@@ -1,15 +1,21 @@
 package br.com.dandrade.viagens.models;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
-public class Ticket {
+public class Ticket implements StretchMinimalInfo{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +61,43 @@ public class Ticket {
                 .collect(Collectors.joining(","));
     }
 
+    public String getOrigin() {
+        return this.flight.getStretchs()
+                .first()
+                .getAirRoute()
+                .getOriginAirportName();
+    }
+
+    public String getDestiny() {
+        return this.flight.getStretchs()
+                .last()
+                .getAirRoute()
+                .getDestinyAirportName();
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
     public String getCompanyName() {
         return flight.getCompanyName();
     }
+
+    public Collection<Stretch> getStretchs() {
+        return flight.getStretchs();
+    }
+
+    public Long calculateDowntime() {
+        return getStretchs()
+                .stream().filter( stretch -> stretch.isConnection() || stretch.isScale() )
+                .map( Stretch::getStopTime ).reduce( 0L, Long::sum );
+    }
+
+    public BigDecimal calculateTotal( Optional<Ticket> maybeTicketBack, Integer numberOfPassengers ) {
+        return maybeTicketBack.map( back -> this.value.add( back.value ) )
+                .orElse( this.value )
+                .multiply( new BigDecimal( numberOfPassengers ) );
+    }
+
+
 }
